@@ -27,33 +27,32 @@ export const getStaticProps = async (context) => {
     const res1 = await fetch('https://chillin.cl/api/productos/sorted/' + id);
     const data = await res.json()
     const dato = await res1.json()
-    var commerceCode = '597043568497'
-    var apiKey = '42bdb1c2d4175e67bc45257ac14c03e7'
-    var returnUrl = "https://crypton.cl/success"
+    // var commerceCode = '597043568497'
+    // var apiKey = '42bdb1c2d4175e67bc45257ac14c03e7'
+    // var returnUrl = "https://crypton.cl/success"
      
     
-    let tbk_response = []
+    // let tbk_response = []
     
-    for (const a of dato){
-        var buyOrder = a.buy_order
-        var amount = a.price
-        var sessionId = a.session_id
-        const tx = new WebpayPlus.Transaction(new Options(commerceCode, apiKey, Environment.Production));
-        const response = await tx.create(buyOrder, sessionId, amount, returnUrl);
-        tbk_response.push(response)
+    // for (const a of dato){
+    //     var buyOrder = a.buy_order
+    //     var amount = a.price
+    //     var sessionId = a.session_id
+    //     const tx = new WebpayPlus.Transaction(new Options(commerceCode, apiKey, Environment.Production));
+    //     const response = await tx.create(buyOrder, sessionId, amount, returnUrl);
+    //     tbk_response.push(response)
         
         
-    }
+    // }
 
     return {
         props: {
             negocio: data,
             productos: dato,
-            tbk_response: tbk_response
         }
     }
 }
-const SingleNegocioPage = ({ negocio, productos, tbk_response }) => {
+const SingleNegocioPage = ({ negocio, productos }) => {
     return(
         <>
         <div className="flex justify-center mt-10">
@@ -71,8 +70,6 @@ const SingleNegocioPage = ({ negocio, productos, tbk_response }) => {
         </div>
         <div className=" grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 mx-10 p-10">
               { productos.map((producto, index) => {
-                  const transaction = tbk_response[index]
-                  console.log("working perfectly: ", transaction);
                   
                   return (
                       <>
@@ -88,8 +85,8 @@ const SingleNegocioPage = ({ negocio, productos, tbk_response }) => {
                             
                         </div>
                         <div className="items-center mx-20 py-4">
-                                    <form method="post" action={transaction.url}>
-                                    <input type="hidden" name="token_ws" value={transaction.token} />
+                                    <form method="post" action={producto.url}>
+                                    <input type="hidden" name="token_ws" value={producto.token} />
                                     <input className="cursor-pointer inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-md leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit" value={`Ir a pagar $${producto.price}`} />
                                     </form>
                         </div>

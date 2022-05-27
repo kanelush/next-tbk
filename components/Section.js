@@ -2,11 +2,42 @@ import React from 'react'
 import useSWR from 'swr'
 import { Loader } from './Loader';
 import gsap from 'gsap';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import axios from 'axios';
 
 const Section = () => {
+  const token = useRef(null);
+  // EFFECT 
+  useEffect(() => {
+      var url = window.location;
+      const token_ws = new URLSearchParams(url.search).get('token_ws');
+      console.log("token: ", token_ws);
+      token.current = token_ws
+      console.log("This is my token now:", token.current);
+      var post_url = 'https://chillin.cl/api/tokens'
+      const datos = {token_ws}
+      if (typeof token_ws !== 'undefined') 
+        // the variable is defined
+     {
+        axios
+      .post(post_url, datos)
+      .then((resp) => {
+      console.log("XDDD: ", resp);
+      
+      
+      })
+      .catch((err) => {
+      console.log(err);
+      });
+      console.log("added!")
+      }
+      
+      
+
+    }, [])
+
   const [Turnon , setTurnon] = useState(true)
   const [Restaurante , setRestaurante] = useState(false)
   const [Profesionales , setProfesionales] = useState(false)
@@ -53,6 +84,10 @@ const Section = () => {
     setProfesionales(false)
     setTurismo(true)
   }
+
+  
+
+
   return (
     <>
     <Head>
